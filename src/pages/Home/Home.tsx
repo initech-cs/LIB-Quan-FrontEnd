@@ -1,11 +1,12 @@
-import React, { FC } from "react";
-import { RouteComponentProps } from "react-router-dom";
-import { Grid, Paper, makeStyles, Theme, Button } from "@material-ui/core";
+import React from "react";
+import { Grid, makeStyles, Theme, Button } from "@material-ui/core";
+import { CursorTracker } from "../../components";
 
-export const Home: FC<RouteComponentProps> = (): JSX.Element => {
+export default function Home(): JSX.Element {
   const useStyles = makeStyles<Theme>((theme) => ({
     root: {
       flexGrow: 1,
+      margin: "5%",
     },
     paper: {
       height: "50vh",
@@ -17,7 +18,7 @@ export const Home: FC<RouteComponentProps> = (): JSX.Element => {
       width: "60%",
       height: "60%",
       fontSize: "36px",
-      marginTop: '12px'
+      marginTop: "12px",
     },
   }));
   const classes = useStyles();
@@ -28,7 +29,7 @@ export const Home: FC<RouteComponentProps> = (): JSX.Element => {
   };
 
   return (
-    <div>
+    <div className={classes.root}>
       <Grid
         container
         direction="row"
@@ -37,14 +38,14 @@ export const Home: FC<RouteComponentProps> = (): JSX.Element => {
         spacing={3}
       >
         <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>xs=12 sm=6</Paper>
+          <CursorTracker />
         </Grid>
         <Grid item xs={12} sm={6}>
           <Button
             className={classes.button}
             variant="contained"
             color="primary"
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent) => {
               handleClick(e, "SIGN_IN");
             }}
           >
@@ -54,7 +55,7 @@ export const Home: FC<RouteComponentProps> = (): JSX.Element => {
             className={classes.button}
             variant="contained"
             color="secondary"
-            onClick={(e: React.MouseEvent): void => {
+            onClick={(e: React.MouseEvent) => {
               handleClick(e, "REGISTER");
             }}
           >
@@ -64,4 +65,4 @@ export const Home: FC<RouteComponentProps> = (): JSX.Element => {
       </Grid>
     </div>
   );
-};
+}
