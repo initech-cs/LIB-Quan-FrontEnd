@@ -1,25 +1,14 @@
-import React, { useRef, MutableRefObject } from "react";
+import React, { MutableRefObject } from "react";
 import { makeStyles } from "@material-ui/core";
 
-export default function CursorTracker(): JSX.Element {
-  const leftEye = useRef<HTMLDivElement>(null);
-  const rightEye = useRef<HTMLDivElement>(null);
 
-  let eyeballs: Array<MutableRefObject<any>> = [leftEye, rightEye];
+interface Props {
+  leftEye: MutableRefObject<HTMLDivElement | null>,
+  rightEye: MutableRefObject<HTMLDivElement | null>
+}
 
-  const eyeball = (e: React.MouseEvent): void => {
-    eyeballs.forEach((eye) => {
-      let x =
-        eye.current?.getBoundingClientRect().left +
-        eye.current?.clientWidth / 2;
-      let y =
-        eye.current?.getBoundingClientRect().top +
-        eye.current?.clientHeight / 2;
-      let radian = Math.atan2(e.pageX - x, e.pageY - y);
-      let rot = radian * (180 / Math.PI) * -1 + 270;
-      eye.current.style.transform = "rotate(" + rot + "deg)";
-    });
-  };
+
+export default function CursorTracker(props: Props): JSX.Element {
   const useStyles = makeStyles(() => ({
     root: {
       flexGrow: 1,
@@ -73,12 +62,12 @@ export default function CursorTracker(): JSX.Element {
   }));
   const classes = useStyles();
   return (
-    <div onMouseMove={(e: React.MouseEvent) => eyeball(e)}>
+    <div>
       <div className={classes.envelope}>
         <div className={classes.opener}></div>
         <div className={classes.eyes}>
-          <div ref={leftEye} className={classes.eye}></div>
-          <div ref={rightEye} className={classes.eye}></div>
+          <div ref={props.leftEye} className={classes.eye}></div>
+          <div ref={props.rightEye} className={classes.eye}></div>
         </div>
       </div>
     </div>
