@@ -1,11 +1,10 @@
 import React, { useRef, MutableRefObject } from "react";
 import { Grid, Button } from "@material-ui/core";
-import { CursorTracker } from "../../components";
 import "./styles.scss";
 
 export default function Home(): JSX.Element {
-  const leftEye = useRef(null);
-  const rightEye = useRef(null);
+  const leftEye = useRef<HTMLDivElement>(null);
+  const rightEye = useRef<HTMLDivElement>(null);
   let eyeballs: Array<MutableRefObject<any>> = [leftEye, rightEye];
 
   const handleClick = (e: React.MouseEvent, button: string): void => {
@@ -38,7 +37,13 @@ export default function Home(): JSX.Element {
         className="root"
       >
         <Grid item xs={12} lg={6}>
-          <CursorTracker leftEye={leftEye} rightEye={rightEye} />
+          <div className="envelope">
+            <div className="opener"></div>
+            <div className="eyes">
+              <div ref={leftEye} className="eye"></div>
+              <div ref={rightEye} className="eye"></div>
+            </div>
+          </div>
         </Grid>
         <Grid item xs={12} lg={6} className="buttons">
           <Button
