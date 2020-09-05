@@ -1,34 +1,12 @@
 import React, { useRef, MutableRefObject } from "react";
-import { Grid, makeStyles, Theme, Button } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import { CursorTracker } from "../../components";
+import "./styles.scss";
 
 export default function Home(): JSX.Element {
-  const leftEye = useRef(null)
-  const rightEye = useRef(null)
+  const leftEye = useRef(null);
+  const rightEye = useRef(null);
   let eyeballs: Array<MutableRefObject<any>> = [leftEye, rightEye];
-
-  const useStyles = makeStyles<Theme>((theme) => ({
-    root: {
-      flexGrow: 1,
-      margin: '0',
-      padding: "5%",
-      height: '100vh',
-      width: '100%',
-    },
-    paper: {
-      height: "50vh",
-      padding: theme.spacing(2),
-      textAlign: "center",
-      color: theme.palette.text.secondary,
-    },
-    button: {
-      width: "60%",
-      height: "60%",
-      fontSize: "36px",
-      marginTop: "12px",
-    },
-  }));
-  const classes = useStyles();
 
   const handleClick = (e: React.MouseEvent, button: string): void => {
     e.preventDefault();
@@ -50,20 +28,21 @@ export default function Home(): JSX.Element {
   };
 
   return (
-    <div onMouseMove={(e: React.MouseEvent): void => eyeball(e)} className={classes.root}>
+    <div onMouseMove={(e: React.MouseEvent): void => eyeball(e)}>
       <Grid
         container
         direction="row"
         justify="space-evenly"
         alignItems="center"
         spacing={3}
+        className="root"
       >
-        <Grid item xs={12} sm={6}>
-          <CursorTracker leftEye={leftEye} rightEye={rightEye}/>
+        <Grid item xs={12} lg={6}>
+          <CursorTracker leftEye={leftEye} rightEye={rightEye} />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} lg={6} className="buttons">
           <Button
-            className={classes.button}
+            className="button"
             variant="contained"
             color="primary"
             onClick={(e: React.MouseEvent) => {
@@ -73,7 +52,7 @@ export default function Home(): JSX.Element {
             Sign In
           </Button>
           <Button
-            className={classes.button}
+            className="button"
             variant="contained"
             color="secondary"
             onClick={(e: React.MouseEvent) => {

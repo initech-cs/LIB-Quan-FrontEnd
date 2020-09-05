@@ -1,0 +1,63 @@
+.envelope {
+  position: relative;
+  height: 300px;
+  width: 500px;
+  background: #353b48;
+
+  .opener {
+    width: 0;
+    height: 0;
+    border-left: 250px solid transparent;
+    border-right: 250px solid transparent;
+    border-top: 200px solid #dcdde1;
+  }
+
+  .eyes {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    top: 0;
+
+    .eye {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: block;
+      background: #fff;
+      margin: 0 15px;
+      border-radius: 50%;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 25px;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        background: #333;
+        border-radius: 50%;
+      }
+    }
+  }
+  @media all and (max-width: 800px) {
+    width: 320px;
+    height: auto;
+
+    .opener {
+      border-left-width: 160px;
+      border-right-width: 160px;
+      border-top-width: 90px;
+    }
+  }
+  @media all and (max-width: 300px) {
+    width: 250px;
+    height: auto;
+
+    .opener {
+      border-left-width: 125px;
+      border-right-width: 125px;
+      border-top-width: 100px;
+    }
+  }
+}
