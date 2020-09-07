@@ -1,15 +1,19 @@
 import React, { useRef, MutableRefObject } from "react";
+import { Dispatch } from "../../types";
 import { Grid, Button } from "@material-ui/core";
+import { connect, ConnectedProps } from "react-redux";
+import { homePageAction } from "../../actions";
 import "./styles.scss";
 
-export default function Home(): JSX.Element {
+const Home = (props: Props): JSX.Element => {
   const leftEye = useRef<HTMLDivElement>(null);
   const rightEye = useRef<HTMLDivElement>(null);
   let eyeballs: Array<MutableRefObject<any>> = [leftEye, rightEye];
 
   const handleClick = (e: React.MouseEvent, button: string): void => {
     e.preventDefault();
-    console.log("You clicked " + button);
+    if (button === 'SIGN_IN') props.fetchLoginPage();
+    if (button === 'REGISTER') props.fetchRegisterPage();
   };
 
   const eyeball = (e: React.MouseEvent): void => {
@@ -28,6 +32,7 @@ export default function Home(): JSX.Element {
 
   return (
     <div onMouseMove={(e: React.MouseEvent): void => eyeball(e)}>
+      {console.log(props)}
       <Grid
         container
         direction="row"
@@ -70,4 +75,18 @@ export default function Home(): JSX.Element {
       </Grid>
     </div>
   );
-}
+};
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux
+
+const mapStateToProps = (homeState: any) => ({ homeState });
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  fetchLoginPage: () => dispatch(homePageAction.fetchLoginPage()),
+  fetchRegisterPage: () => dispatch(homePageAction.fetchRegisterPage())
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(Home);
