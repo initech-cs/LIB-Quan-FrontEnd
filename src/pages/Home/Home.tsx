@@ -3,6 +3,8 @@ import { Dispatch } from "../../types";
 import { Grid, Button } from "@material-ui/core";
 import { connect, ConnectedProps } from "react-redux";
 import { homePageAction } from "../../actions";
+import { LoginForm } from "../../components";
+import { RegisterForm } from "../../components";
 import "./styles.scss";
 
 const Home = (props: Props): JSX.Element => {
@@ -12,8 +14,8 @@ const Home = (props: Props): JSX.Element => {
 
   const handleClick = (e: React.MouseEvent, button: string): void => {
     e.preventDefault();
-    if (button === 'SIGN_IN') props.fetchLoginPage();
-    if (button === 'REGISTER') props.fetchRegisterPage();
+    if (button === "SIGN_IN") props.fetchLoginPage();
+    if (button === "REGISTER") props.fetchRegisterPage();
   };
 
   const eyeball = (e: React.MouseEvent): void => {
@@ -30,27 +32,10 @@ const Home = (props: Props): JSX.Element => {
     });
   };
 
-  return (
-    <div onMouseMove={(e: React.MouseEvent): void => eyeball(e)}>
-      {console.log(props)}
-      <Grid
-        container
-        direction="row"
-        justify="space-evenly"
-        alignItems="center"
-        spacing={3}
-        className="root"
-      >
-        <Grid item xs={12} lg={6}>
-          <div className="envelope">
-            <div className="opener"></div>
-            <div className="eyes">
-              <div ref={leftEye} className="eye"></div>
-              <div ref={rightEye} className="eye"></div>
-            </div>
-          </div>
-        </Grid>
-        <Grid item xs={12} lg={6} className="buttons">
+  const Pages = (props: Props) => {
+    if (props.homeState.HomePageReducer.readyStatus === "HOME_PAGE") {
+      return (
+        <div className="buttons">
           <Button
             className="button"
             variant="contained"
@@ -71,6 +56,41 @@ const Home = (props: Props): JSX.Element => {
           >
             Register
           </Button>
+        </div>
+      );
+    }
+
+    if (props.homeState.HomePageReducer.readyStatus === "LOGIN_PAGE") {
+      return <LoginForm />;
+    }
+    if (props.homeState.HomePageReducer.readyStatus === "REGISTER_PAGE") {
+      return <RegisterForm />;
+    }
+
+    return <div></div>;
+  };
+
+  return (
+    <div onMouseMove={(e: React.MouseEvent): void => eyeball(e)}>
+      <Grid
+        container
+        direction="row"
+        justify="space-evenly"
+        alignItems="center"
+        spacing={3}
+        className="root"
+      >
+        <Grid item xs={12} lg={6}>
+          <div className="envelope">
+            <div className="opener"></div>
+            <div className="eyes">
+              <div ref={leftEye} className="eye"></div>
+              <div ref={rightEye} className="eye"></div>
+            </div>
+          </div>
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <Pages {...props} />
         </Grid>
       </Grid>
     </div>
@@ -78,13 +98,13 @@ const Home = (props: Props): JSX.Element => {
 };
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux
+type Props = PropsFromRedux;
 
 const mapStateToProps = (homeState: any) => ({ homeState });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchLoginPage: () => dispatch(homePageAction.fetchLoginPage()),
-  fetchRegisterPage: () => dispatch(homePageAction.fetchRegisterPage())
+  fetchRegisterPage: () => dispatch(homePageAction.fetchRegisterPage()),
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
