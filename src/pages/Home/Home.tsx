@@ -6,6 +6,7 @@ import { homePageAction } from "../../actions";
 import { LoginForm } from "../../components";
 import { RegisterForm } from "../../components";
 import "./styles.scss";
+import 'animate.css';
 
 const Home = (props: Props): JSX.Element => {
   const leftEye = useRef<HTMLDivElement>(null);

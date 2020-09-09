@@ -1,5 +1,5 @@
 import { connect, ConnectedProps } from "react-redux";
-import React from "react";
+import React, { FormEvent } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,7 +13,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import {homePageAction} from "../../actions"
+import { homePageAction } from "../../actions";
 import { Dispatch } from "../../types";
 
 function Copyright() {
@@ -49,17 +49,25 @@ const useStyles = makeStyles((theme) => ({
 function LoginForm(props: Props) {
   const classes = useStyles();
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div className={classes.paper + " animate__animated animate__fadeInUp"}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          onSubmit={(e: FormEvent<HTMLFormElement>) => handleSubmit(e)}
+          className={classes.form}
+          noValidate
+        >
           <TextField
             variant="outlined"
             margin="normal"
@@ -102,14 +110,21 @@ function LoginForm(props: Props) {
               </Link>
             </Grid>
             <Grid item>
-              <Link onClick={()=> props.fetchRegisterPage()} href="#" variant="body2">
+              <Link
+                onClick={() => props.fetchRegisterPage()}
+                href="#"
+                variant="body2"
+              >
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
+      <Box
+        className="animate__animated animate__fadeInUp animate__delay-1s"
+        mt={8}
+      >
         <Copyright />
       </Box>
     </Container>
@@ -125,6 +140,7 @@ const mapStateToProps = (homeStatus: any) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchRegisterPage: () => dispatch(homePageAction.fetchRegisterPage()),
+  loginUser: () => dispatch(homePageAction.loginUser({})),
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -1,28 +1,25 @@
-import { connect, ConnectedProps } from 'react-redux'
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { connect, ConnectedProps } from "react-redux";
+import React from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import { homePageAction } from "../../actions";
+import { Dispatch } from "../../types";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="primary" >
-        Letter In Bottle
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      {"Copyright © "}
+      <Link color="primary">Letter In Bottle</Link> {new Date().getFullYear()}
+      {"."}
     </Typography>
   );
 }
@@ -30,16 +27,16 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   submit: {
@@ -47,13 +44,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function RegisterForm() {
+function RegisterForm(props: Props) {
   const classes = useStyles();
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div className={classes.paper + " animate__animated animate__fadeInUp"}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
@@ -108,12 +105,6 @@ function RegisterForm() {
                 autoComplete="current-password"
               />
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -126,31 +117,38 @@ function RegisterForm() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link
+                onClick={() => props.fetchLoginPage()}
+                href="#"
+                variant="body2"
+              >
                 Already have an account? Sign in
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
+      <Box
+        className="animate__animated animate__fadeInUp animate__delay-1s"
+        mt={5}
+      >
         <Copyright />
       </Box>
     </Container>
   );
 }
 
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux;
 
-const mapStateToProps = (state: any) => ({
-    
-})
+const mapStateToProps = (homeState: any) => ({
+  homeState,
+});
 
-const mapDispatchToProps = {
-    
-}
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  fetchLoginPage: () => dispatch(homePageAction.fetchLoginPage()),
+});
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default connector(RegisterForm)
+export default connector(RegisterForm);
