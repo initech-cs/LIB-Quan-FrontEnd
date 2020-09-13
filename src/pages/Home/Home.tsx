@@ -1,17 +1,25 @@
-import React, { useRef, MutableRefObject } from "react";
+import React, { useRef, MutableRefObject, useEffect } from "react";
 import { Dispatch } from "../../types";
 import { Grid, Button } from "@material-ui/core";
 import { connect, ConnectedProps } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { homePageAction } from "../../actions";
-import { LoginForm } from "../../components";
+import { Loading, LoginForm } from "../../components";
 import { RegisterForm } from "../../components";
 import "./styles.scss";
-import 'animate.css';
+import "animate.css";
 
 const Home = (props: Props): JSX.Element => {
+  const history = useHistory();
   const leftEye = useRef<HTMLDivElement>(null);
   const rightEye = useRef<HTMLDivElement>(null);
   let eyeballs: Array<MutableRefObject<any>> = [leftEye, rightEye];
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      history.push("/dashboard");
+    }
+  });
 
   const handleClick = (e: React.MouseEvent, button: string): void => {
     e.preventDefault();
@@ -73,6 +81,9 @@ const Home = (props: Props): JSX.Element => {
 
   return (
     <div onMouseMove={(e: React.MouseEvent): void => eyeball(e)}>
+      {props.homeState.HomePageReducer.readyStatus === "LOADING" ? (
+        <Loading />
+      ) : null}
       <Grid
         container
         direction="row"

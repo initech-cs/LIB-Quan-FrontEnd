@@ -1,5 +1,5 @@
 import { connect, ConnectedProps } from "react-redux";
-import React, { FormEvent } from "react";
+import React, { FormEvent, useState, ChangeEvent } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -15,6 +15,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { homePageAction } from "../../actions";
 import { Dispatch } from "../../types";
+import { useHistory } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -47,16 +48,39 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function LoginForm(props: Props) {
+  const history = useHistory();
+  const [username, setUserName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const classes = useStyles();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const input = { username, password };
     e.preventDefault();
+
+    try {
+      const res = await props.loginUser(input);
+      if (res) {
+        localStorage.setItem("token", res.data.token);
+        history.push("/dashboard");
+      }
+    } catch (err) {
+      alert("You silly! " + err.message);
+    }
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>, form: string) => {
+    if (form === "username") {
+      setUserName(e.target.value);
+    }
+    if (form === "password") {
+      setPassword(e.target.value);
+    }
   };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper + " animate__animated animate__fadeInUp"}>
+      <div className={classes.paper + " animate__animated animate__fadeIn"}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
@@ -73,11 +97,15 @@ function LoginForm(props: Props) {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="userName"
+            label="User Name"
+            name="userName"
+            autoComplete="userName"
             autoFocus
+            value={username}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              handleChange(e, "username")
+            }
           />
           <TextField
             variant="outlined"
@@ -89,6 +117,10 @@ function LoginForm(props: Props) {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              handleChange(e, "password")
+            }
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -140,7 +172,7 @@ const mapStateToProps = (homeStatus: any) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchRegisterPage: () => dispatch(homePageAction.fetchRegisterPage()),
-  loginUser: () => dispatch(homePageAction.loginUser({})),
+  loginUser: (userData: object) => dispatch(homePageAction.loginUser(userData)),
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

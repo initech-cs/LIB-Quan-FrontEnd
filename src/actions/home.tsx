@@ -11,12 +11,15 @@ export const fetchRegisterPage = () => async (dispatch: Dispatch) => {
 };
 
 export const loginUser = (userData: object) => async (dispatch: Dispatch) => {
-  await dispatch({ type: "LOADING" });
+  // await dispatch({ type: "LOADING" });
   const data = await axios.post(
     process.env.REACT_APP_API_URL + "/login",
     userData,
     {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
     }
   );
   return data;
