@@ -42,7 +42,7 @@ const Home = (props: Props): JSX.Element => {
   };
 
   const Pages = (props: Props) => {
-    if (props.homeState.HomePageReducer.readyStatus === "HOME_PAGE") {
+    if (props.state.HomePage.readyStatus === "HOME_PAGE") {
       return (
         <div className="buttons">
           <Button
@@ -69,10 +69,10 @@ const Home = (props: Props): JSX.Element => {
       );
     }
 
-    if (props.homeState.HomePageReducer.readyStatus === "LOGIN_PAGE") {
+    if (props.state.HomePage.readyStatus === "LOGIN_PAGE") {
       return <LoginForm />;
     }
-    if (props.homeState.HomePageReducer.readyStatus === "REGISTER_PAGE") {
+    if (props.state.HomePage.readyStatus === "REGISTER_PAGE") {
       return <RegisterForm />;
     }
 
@@ -81,7 +81,7 @@ const Home = (props: Props): JSX.Element => {
 
   return (
     <div onMouseMove={(e: React.MouseEvent): void => eyeball(e)}>
-      {props.homeState.HomePageReducer.readyStatus === "LOADING" ? (
+      {props.state.HomePage.readyStatus === "LOADING" ? (
         <Loading />
       ) : null}
       <Grid
@@ -112,7 +112,7 @@ const Home = (props: Props): JSX.Element => {
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
-const mapStateToProps = (homeState: any) => ({ homeState });
+const mapStateToProps = (state: any) => ({ state });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchLoginPage: () => dispatch(homePageAction.fetchLoginPage()),

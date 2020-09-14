@@ -33,7 +33,7 @@ export const Dashboard = (props: Props) => {
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
-const mapStateToProps = (state: any) => ({});
+const mapStateToProps = (state: any) => ({state});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({});
 
