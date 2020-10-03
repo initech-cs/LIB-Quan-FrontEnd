@@ -1,5 +1,5 @@
 import { connect, ConnectedProps } from "react-redux";
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,6 +13,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { homePageAction } from "../../actions";
 import { Dispatch } from "../../types";
+import { useHistory } from "react-router-dom";
+import { toast } from 'react-toastify'
 
 function Copyright() {
   return (
@@ -45,7 +47,52 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function RegisterForm(props: Props) {
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const classes = useStyles();
+  const history = useHistory()
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const userData = {
+      username,
+      password,
+      email,
+    };
+    const res = await props.signUp(userData);
+    if (res) {
+      toast.success(`🦄 Welcome, ${res.data.data.username}!`, {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        onClose: () => history.push("/dashboard")
+        });
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    input: string
+  ) => {
+    switch (input) {
+      case "username":
+        setUsername(e.target.value);
+        break;
+      case "email":
+        setEmail(e.target.value);
+        break;
+      case "password":
+        setPassword(e.target.value);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -57,10 +104,18 @@ function RegisterForm(props: Props) {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmit(e)}
+          className={classes.form}
+          noValidate
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                value={username}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleChange(e, "username")
+                }
                 autoComplete="username"
                 name="userName"
                 variant="outlined"
@@ -73,6 +128,10 @@ function RegisterForm(props: Props) {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                value={email}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleChange(e, "email")
+                }
                 variant="outlined"
                 required
                 fullWidth
@@ -84,6 +143,10 @@ function RegisterForm(props: Props) {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                value={password}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleChange(e, "password")
+                }
                 variant="outlined"
                 required
                 fullWidth
@@ -136,6 +199,7 @@ const mapStateToProps = (homeState: any) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchLoginPage: () => dispatch(homePageAction.fetchLoginPage()),
+  signUp: (userData: object) => dispatch(homePageAction.signUp(userData)),
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

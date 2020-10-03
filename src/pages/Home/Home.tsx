@@ -6,6 +6,8 @@ import { useHistory } from "react-router-dom";
 import { homePageAction } from "../../actions";
 import { Loading, LoginForm } from "../../components";
 import { RegisterForm } from "../../components";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./styles.scss";
 import "animate.css";
 
@@ -81,9 +83,8 @@ const Home = (props: Props): JSX.Element => {
 
   return (
     <div onMouseMove={(e: React.MouseEvent): void => eyeball(e)}>
-      {props.state.HomePage.readyStatus === "LOADING" ? (
-        <Loading />
-      ) : null}
+      <ToastContainer />
+      {props.state.HomePage.readyStatus === "LOADING" ? <Loading /> : null}
       <Grid
         container
         direction="row"

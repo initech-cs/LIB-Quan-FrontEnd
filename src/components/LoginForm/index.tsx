@@ -56,16 +56,8 @@ function LoginForm(props: Props) {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     const input = { username, password };
     e.preventDefault();
-
-    try {
-      const res = await props.loginUser(input);
-      if (res) {
-        localStorage.setItem("token", res.data.token);
-        history.push("/dashboard");
-      }
-    } catch (err) {
-      alert("You silly! " + err.message);
-    }
+    const res = await props.loginUser(input);
+    if (res) history.push("/dashboard");
   };
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>, form: string) => {
